@@ -21,12 +21,11 @@ function LoadingSpinner({ invert }: { invert?: boolean }) {
     <svg
       className={clsx(
         'animate-spin h-5 w-5 text-gray-900 dark:text-gray-100',
-        invert && 'text-gray-100 dark:text-gray-900'
+        invert && 'text-gray-100 dark:text-gray-900',
       )}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      viewBox="0 0 24 24"
-    >
+      viewBox="0 0 24 24">
       <circle
         className="opacity-25"
         cx="12"
@@ -84,18 +83,16 @@ function Item({
       className={clsx(
         'p-6 mx-8 flex items-center border-t border-l border-r',
         isFirst && 'rounded-t-md',
-        isLast && 'border-b rounded-b-md'
-      )}
-    >
+        isLast && 'border-b rounded-b-md',
+      )}>
       <button
         className={clsx(
           'ring-1 ring-gray-200 rounded-full w-8 min-w-[2rem] h-8 mr-4 focus:outline-none focus:ring focus:ring-blue-300',
           (isReleased || hasVoted) &&
-            'bg-green-100 cursor-not-allowed ring-green-300'
+            'bg-green-100 cursor-not-allowed ring-green-300',
         )}
         disabled={isReleased || hasVoted}
-        onClick={upvote}
-      >
+        onClick={upvote}>
         {isReleased ? '✅' : '👍'}
       </button>
       <h3 className="text font-semibold w-full text-left">{feature.title}</h3>
@@ -214,8 +211,7 @@ export default function Roadmap({
               />
               <button
                 className="flex items-center justify-center absolute right-2 top-2 px-4 h-10 text-lg border bg-black text-white rounded-md w-24 focus:outline-none focus:ring focus:ring-blue-300 focus:bg-gray-800"
-                type="submit"
-              >
+                type="submit">
                 {isCreateLoading ? <LoadingSpinner invert /> : 'Request'}
               </button>
             </form>
@@ -240,6 +236,7 @@ export default function Roadmap({
             </p>
             <form className="relative my-4" onSubmit={subscribe}>
               <input
+                id="emailInput"
                 ref={subscribeInputRef}
                 aria-label="Email for updates"
                 placeholder="Email Address"
@@ -251,8 +248,7 @@ export default function Roadmap({
               />
               <button
                 className="flex items-center justify-center absolute right-2 top-2 px-4 h-10 border border-gray-200 text-gray-900 rounded-md w-14 focus:outline-none focus:ring focus:ring-blue-300 focus:bg-gray-100"
-                type="submit"
-              >
+                type="submit">
                 {isEmailLoading ? <LoadingSpinner /> : 'OK'}
               </button>
             </form>
@@ -271,8 +267,7 @@ export default function Roadmap({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex rounded focus:outline-none focus:ring focus:ring-blue-300 mb-4 sm:mb-0 min-w-max"
-                href="https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-redis&project-name=redis-roadmap&repository-name=redis-roadmap&demo-title=Redis%20Roadmap&demo-description=Create%20and%20upvote%20features%20for%20your%20product.&demo-url=https%3A%2F%2Froadmap-redis.vercel.app%2F&integration-ids=oac_V3R1GIpkoJorr6fqyiwdhl17"
-              >
+                href="https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-redis&project-name=redis-roadmap&repository-name=redis-roadmap&demo-title=Redis%20Roadmap&demo-description=Create%20and%20upvote%20features%20for%20your%20product.&demo-url=https%3A%2F%2Froadmap-redis.vercel.app%2F&integration-ids=oac_V3R1GIpkoJorr6fqyiwdhl17">
                 <img
                   src="https://vercel.com/button"
                   alt="Vercel Deploy Button"
