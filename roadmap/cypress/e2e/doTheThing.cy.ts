@@ -57,6 +57,12 @@ describe('empty spec', () => {
     it('has expected placeholder text', () => {
       getRequestInput().should('have.attr', 'placeholder')
     })
+
+    it('request should be added to request list', () => {
+      const existingItem = getItemsContainer().last()
+      // getItemsContainer().last().should('have.keys', [0])
+      // TODO: find last item if it exists, click the btn and find last item
+    })
   })
 
   function getEmailInput() {
@@ -65,6 +71,10 @@ describe('empty spec', () => {
 
   function getRequestInput() {
     return cy.get('#requestInput')
+  }
+
+  function getItemsContainer() {
+    return cy.get('#itemsContainer')
   }
 
   function getSubmitEmailButton() {

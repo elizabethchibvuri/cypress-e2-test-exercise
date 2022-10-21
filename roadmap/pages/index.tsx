@@ -44,12 +44,14 @@ function LoadingSpinner({ invert }: { invert?: boolean }) {
 }
 
 function Item({
+  key,
   isFirst,
   isLast,
   isReleased,
   hasVoted,
   feature,
 }: {
+  key: number
   isFirst: boolean
   isLast: boolean
   isReleased: boolean
@@ -80,6 +82,7 @@ function Item({
 
   return (
     <div
+      id={`featureItem${key}`}
       className={clsx(
         'p-6 mx-8 flex items-center border-t border-l border-r',
         isFirst && 'rounded-t-md',
@@ -217,7 +220,7 @@ export default function Roadmap({
               </button>
             </form>
           </div>
-          <div className="w-full">
+          <div id="itemsContainer" className="w-full">
             {data.features.map((feature: Feature, index: number) => (
               <Item
                 key={index}
