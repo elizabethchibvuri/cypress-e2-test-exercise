@@ -201,6 +201,7 @@ export default function Roadmap({
           <div className="mx-8 w-full">
             <form className="relative my-8" onSubmit={addFeature}>
               <input
+                id="requestInput"
                 ref={featureInputRef}
                 aria-label="Suggest a feature for our roadmap"
                 placeholder="I want..."
