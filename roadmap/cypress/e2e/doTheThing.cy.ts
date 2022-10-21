@@ -9,7 +9,7 @@ describe('empty spec', () => {
 
   describe('subscribe for emails', () => {
     it('can type in the input', () => {
-      cy.get('#emailInput')
+      getEmailInput()
         .type('blah')
         .should('have.value', 'blah')
         .type('aoeu')
@@ -17,7 +17,7 @@ describe('empty spec', () => {
     })
 
     it('can type in the input as well', () => {
-      cy.get('#emailInput')
+      getEmailInput()
         .type('blah')
         .should('have.value', 'blah')
         .clear()
@@ -26,28 +26,48 @@ describe('empty spec', () => {
     })
 
     it('can click the email submission button', () => {
-      cy.get('#emailInput').should('have.value', '')
-      cy.get('#submitEmailButton').click()
-      cy.get('#emailInput').should('have.value', '')
+      getEmailInput().should('have.value', '')
+      getSubmitEmailButton().click()
+      getEmailInput().should('have.value', '')
     })
 
-    it('clicking email submit button clears the email input field', () => {
-      cy.get('#emailInput')
+    it('clicking email submit button clears the email input field if the email is valid', () => {
+      getEmailInput()
         .type('blah@email.com')
         .should('have.value', 'blah@email.com')
-      cy.get('#submitEmailButton').click()
-      cy.get('#emailInput').should('have.value', '')
+      getSubmitEmailButton().click()
+      getEmailInput().should('have.value', '')
     })
+
+    for (const email of ['aoeu@', '@', '@aoeu', 'aoeu']) {
+      it(`does not clear if the email is nonsense (${email})`, () => {
+        getEmailInput().type(email).should('have.value', email)
+        getSubmitEmailButton().click()
+        getEmailInput().should('have.value', email)
+      })
+    }
   })
 
   describe('adding request', () => {
     it('replaces placeholder text with typed text', () => {
-      cy.get('#requestInput')
+      getRequestInput()
         .type('my new request')
         .should('have.value', 'my new request')
     })
     it('has expected placeholder text', () => {
-      cy.get('#requestInput').should('have.attr', 'placeholder')
+      getRequestInput().should('have.attr', 'placeholder')
     })
   })
+
+  function getEmailInput() {
+    return cy.get('#emailInput')
+  }
+
+  function getRequestInput() {
+    return cy.get('#requestInput')
+  }
+
+  function getSubmitEmailButton() {
+    return cy.get('#submitEmailButton')
+  }
 })
