@@ -59,9 +59,13 @@ describe('empty spec', () => {
     })
 
     it('request should be added to request list', () => {
+      getRequestInput().type('my new request')
+
       const existingItem = getItemsContainer().last()
-      // getItemsContainer().last().should('have.keys', [0])
-      // TODO: find last item if it exists, click the btn and find last item
+      getItemsContainer().children().last().should('have.text', '5')
+      cy.get('[data-cy="addFeature"]')
+
+      // TODO: find last item if it exists, click the btn
     })
   })
 
