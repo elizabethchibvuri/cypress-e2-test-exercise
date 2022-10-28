@@ -99,7 +99,7 @@ function Item({
         onClick={upvote}>
         {isReleased ? '✅' : '👍'}
       </button>
-      <h3 className="text font-semibold w-full text-left">{feature.title}</h3>
+      <h3 className="text font-semibold w-full text-left" data-cy={"feature-title"}>{feature.title}</h3>
       <div className="bg-gray-200 text-gray-700 text-sm rounded-xl px-2 ml-2">
         {feature.score}
       </div>
@@ -222,7 +222,7 @@ export default function Roadmap({
               </button>
             </form>
           </div>
-          <div id="itemsContainer" className="w-full">
+          <div id="itemsContainer" className="w-full" data-cy={"item-list"}>
             {data.features.map((feature: Feature, index: number) => (
               <Item
                 key={index}

@@ -1,10 +1,13 @@
+import { v4 as uuidv4 } from 'uuid'
+
 describe('empty spec', () => {
   before(() => {
     cy.visit('http://localhost:3000')
   })
 
   beforeEach(() => {
-    cy.get('#emailInput').clear()
+    getEmailInput().clear()
+    getRequestInput().clear()
   })
 
   describe('subscribe for emails', () => {
@@ -59,11 +62,11 @@ describe('empty spec', () => {
     })
 
     it('request should be added to request list', () => {
-      getRequestInput().type('my new request')
+      const myId = uuidv4()
+      getRequestInput().type(myId)
+      getSubmitRequestButton().click()
 
-      const existingItem = getItemsContainer().last()
-      getItemsContainer().children().last().should('have.text', '5')
-      cy.get('[data-cy="addFeature"]')
+      cy.get(`[data-cy="${myId}"]`).should('have.text', `👍${myId}1`)
 
       // TODO: find last item if it exists, click the btn
     })
@@ -71,6 +74,10 @@ describe('empty spec', () => {
 
   function getEmailInput() {
     return cy.get('#emailInput')
+  }
+
+  function getDataCyElement(value: string) {
+    return cy.get(`[data-cy="${value}"]`)
   }
 
   function getRequestInput() {
@@ -83,5 +90,9 @@ describe('empty spec', () => {
 
   function getSubmitEmailButton() {
     return cy.get('#submitEmailButton')
+  }
+
+  function getSubmitRequestButton() {
+    return cy.get('[data-cy="addFeature"]')
   }
 })
