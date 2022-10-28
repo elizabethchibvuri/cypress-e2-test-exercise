@@ -66,9 +66,32 @@ describe('empty spec', () => {
       getRequestInput().type(myId)
       getSubmitRequestButton().click()
 
-      cy.get(`[data-cy="${myId}"]`).should('have.text', `👍${myId}1`)
+      cy.get(`[data-cy="${myId}"]`)
+        .children()
+        .filter('[data-cy="featuretitle"]')
+        .should('have.text', myId)
+    })
 
-      // TODO: find last item if it exists, click the btn
+    it('request to automatically have a vote', () => {
+      const myId = uuidv4()
+      getRequestInput().type(myId)
+      getSubmitRequestButton().click()
+
+      cy.get(`[data-cy="${myId}"]`)
+        .children()
+        .filter('[data-cy="upvote"]')
+        .should('have.text', `👍`)
+    })
+
+    it('vote count on request shoul be 1', () => {
+      const myId = uuidv4()
+      getRequestInput().type(myId)
+      getSubmitRequestButton().click()
+
+      cy.get(`[data-cy="${myId}"]`)
+        .children()
+        .filter('[data-cy="vote-count"]')
+        .should('have.text', '1')
     })
   })
 
