@@ -1,7 +1,10 @@
-import { iteratee } from 'cypress/types/lodash'
 import { v4 as uuidv4 } from 'uuid'
+import toast from 'react-hot-toast'
+// import Sinon from 'cypress/types/sinon'
 
-describe('empty spec', () => {
+describe('index', () => {
+  // const toastSpy = Sinon.stub(toast, 'success')
+
   before(() => {
     cy.visit('http://localhost:3000')
   })
@@ -11,7 +14,7 @@ describe('empty spec', () => {
     getRequestInput().clear()
   })
 
-  describe('subscribe for emails', () => {
+  describe.only('subscribe for emails', () => {
     it('can type in the input', () => {
       getEmailInput()
         .type('blah')
@@ -51,7 +54,12 @@ describe('empty spec', () => {
       })
     }
 
-    it('should show toast message when subscription successful', () => {})
+    it('should show toast message when subscription successful', () => {
+      getEmailInput().type('eveemoo@gmail.com')
+      getSubmitEmailButton().click()
+
+      cy.get('.steve').contains('You are now subscribed to feature updates!')
+    })
   })
 
   describe('adding request', () => {
@@ -60,6 +68,7 @@ describe('empty spec', () => {
         .type('my new request')
         .should('have.value', 'my new request')
     })
+
     it('has expected placeholder text', () => {
       getRequestInput().should('have.attr', 'placeholder')
     })

@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Toaster
         position="bottom-right"
         toastOptions={{
+          className: 'steve',
           style: {
             margin: '40px',
             background: '#363636',
