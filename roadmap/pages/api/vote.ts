@@ -4,9 +4,13 @@ import redis from '../../lib/redis'
 
 export default async function upvote(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const { title, id } = req.body
+  console.log(
+    'req object *****************************************************',
+    req,
+  )
   const ip =
     req.headers['x-forwarded-for'] || req.headers['Remote_Addr'] || 'NA'
   const count = ip === 'NA' ? 1 : await redis.sadd('s:' + title, ip)
@@ -17,6 +21,7 @@ export default async function upvote(
     })
   } else {
     const entry = JSON.parse((await redis.hget('features', id)) || 'null')
+    console.log('entry:', entry)
     const updated = {
       ...entry,
       score: entry.score + 1,

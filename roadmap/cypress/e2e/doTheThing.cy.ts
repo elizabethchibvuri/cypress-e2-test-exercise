@@ -1,10 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import toast from 'react-hot-toast'
-// import Sinon from 'cypress/types/sinon'
 
 describe('index', () => {
-  // const toastSpy = Sinon.stub(toast, 'success')
-
   before(() => {
     cy.visit('http://localhost:3000')
   })
@@ -14,7 +10,7 @@ describe('index', () => {
     getRequestInput().clear()
   })
 
-  describe.only('subscribe for emails', () => {
+  describe('subscribe for emails', () => {
     it('can type in the input', () => {
       getEmailInput()
         .type('blah')
@@ -119,6 +115,35 @@ describe('index', () => {
 
       getRequestInput().should('have.value', text)
       getRequestInput().should('have.attr', 'maxLength', 150)
+    })
+  })
+
+  describe.only('voting', () => {
+    it('vote count should increase to 2 after feature added by another user', () => {
+      cy.request({
+        method: 'GET',
+        url: 'api/create',
+        body: {
+          title: 'hello world',
+        },
+        headers: {
+          'x-forwarded-for': '192.168.0.23',
+          'content-type': 'application/json',
+        },
+      })
+
+      // cy.request({
+      //   method: 'GET',
+      //   url: 'api/vote',
+      //   body: {
+      //     id: '24293d60-c760-4dfc-b300-7faf948154a3',
+      //     title: 'hello world',
+      //   },
+      //   headers: {
+      //     'x-forwarded-for': '192.168.0.23',
+      //     'content-type': 'application/json',
+      //   },
+      // })
     })
   })
 
