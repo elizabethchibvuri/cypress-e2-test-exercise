@@ -1,3 +1,4 @@
+import { iteratee } from 'cypress/types/lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 describe('empty spec', () => {
@@ -49,6 +50,8 @@ describe('empty spec', () => {
         getEmailInput().should('have.value', email)
       })
     }
+
+    it('should show toast message when subscription successful', () => {})
   })
 
   describe('adding request', () => {
@@ -77,21 +80,36 @@ describe('empty spec', () => {
       getRequestInput().type(myId)
       getSubmitRequestButton().click()
 
-      cy.get(`[data-cy="${myId}"]`)
+      getDataCyElement(myId)
         .children()
         .filter('[data-cy="upvote"]')
         .should('have.text', `👍`)
     })
 
-    it('vote count on request shoul be 1', () => {
+    it('vote count on request should be 1', () => {
       const myId = uuidv4()
       getRequestInput().type(myId)
       getSubmitRequestButton().click()
 
-      cy.get(`[data-cy="${myId}"]`)
+      getDataCyElement(myId)
         .children()
         .filter('[data-cy="vote-count"]')
         .should('have.text', '1')
+    })
+
+    it('should show validation message if feature input is empty', () => {
+      getRequestInput().should('have.attr', 'required')
+    })
+
+    it('should prevent input length greater than 150 chars', () => {
+      const text = new Array(150).fill('a').join('')
+      getRequestInput().should('have.value', '')
+      getRequestInput().type(text)
+
+      getSubmitRequestButton().click()
+
+      getRequestInput().should('have.value', text)
+      getRequestInput().should('have.attr', 'maxLength', 150)
     })
   })
 
