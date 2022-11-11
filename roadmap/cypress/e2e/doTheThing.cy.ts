@@ -121,7 +121,7 @@ describe('index', () => {
   describe.only('voting', () => {
     it('vote count should increase to 2 after feature added by another user', () => {
       cy.request({
-        method: 'GET',
+        method: 'POST',
         url: 'api/create',
         body: {
           title: 'hello world',
@@ -144,6 +144,73 @@ describe('index', () => {
       //     'content-type': 'application/json',
       //   },
       // })
+    })
+
+    it('request shows in list if created through api call', () => {
+      const myId = uuidv4()
+      cy.request({
+        method: 'POST',
+        url: 'api/createTest',
+        body: {
+          title: myId,
+        },
+        headers: {
+          'x-forwarded-for': '192.168.0.23',
+          'content-type': 'application/json',
+        },
+      }).then((res) => {
+        cy.visit('http://localhost:3000')
+        cy.get(`[data-cy="${myId}"]`)
+          .children()
+          .filter('[data-cy="featuretitle"]')
+          .should('have.text', myId)
+      })
+    })
+
+    it('new requests from other ip addresses should have 1 vote', () => {
+      const myId = uuidv4()
+      cy.request({
+        method: 'POST',
+        url: 'api/createTest',
+        body: {
+          title: myId,
+        },
+        headers: {
+          'x-forwarded-for': '192.168.0.23',
+          'content-type': 'application/json',
+        },
+      }).then((res) => {
+        cy.visit('http://localhost:3000')
+        cy.get(`[data-cy="${myId}"]`)
+          .children()
+          .filter('[data-cy="vote-count"]')
+          .should('have.text', '1')
+      })
+    })
+
+    it(`should be able to vote on other people's requests`, () => {
+      const myId = uuidv4()
+      cy.request({
+        method: 'POST',
+        url: 'api/createTest',
+        body: {
+          title: myId,
+        },
+        headers: {
+          'x-forwarded-for': '192.168.0.23',
+          'content-type': 'application/json',
+        },
+      }).then((res) => {
+        cy.visit('http://localhost:3000')
+        cy.get(`[data-cy="${myId}"]`)
+          .children()
+          .filter('[data-cy="upvote"]')
+          .click()
+        cy.get(`[data-cy="${myId}"]`)
+          .children()
+          .filter('[data-cy="vote-count"]')
+          .should('have.text', '3')
+      })
     })
   })
 
