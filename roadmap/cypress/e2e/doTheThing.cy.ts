@@ -5,9 +5,22 @@ describe('index', () => {
     cy.visit('http://localhost:3000')
   })
 
-  beforeEach(() => {
+  beforeEach(async () => {
     getEmailInput().clear()
     getRequestInput().clear()
+
+    await new Promise((resolve) => {
+      cy.request({
+        method: 'POST',
+        url: 'api/clearCache',
+        headers: {
+          'x-forwarded-for': '192.168.0.23',
+          'content-type': 'application/json',
+        },
+      }).then(() => {
+        resolve(null)
+      })
+    })
   })
 
   describe('subscribe for emails', () => {
@@ -190,6 +203,7 @@ describe('index', () => {
 
     it(`should be able to vote on other people's requests`, () => {
       const myId = uuidv4()
+
       cy.request({
         method: 'POST',
         url: 'api/createTest',
@@ -206,10 +220,45 @@ describe('index', () => {
           .children()
           .filter('[data-cy="upvote"]')
           .click()
+
         cy.get(`[data-cy="${myId}"]`)
           .children()
           .filter('[data-cy="vote-count"]')
-          .should('have.text', '3')
+          .should('have.text', '2')
+      })
+    })
+
+    it('asd', () => {
+      const myId = uuidv4()
+
+      cy.request({
+        method: 'POST',
+        url: 'api/createTest',
+        body: {
+          title: myId,
+        },
+        headers: {
+          'content-type': 'application/json',
+        },
+      }).then((res) => {
+        cy.request({
+          method: 'POST',
+          url: 'api/vote',
+          body: {
+            id: myId,
+            title: myId,
+          },
+          headers: {
+            'x-forwarded-for': '192.168.0.23',
+            'content-type': 'application/json',
+          },
+        }).then((res) => {
+          cy.visit('http://localhost:3000')
+          cy.get(`[data-cy="${myId}"]`)
+            .children()
+            .filter('[data-cy="vote-count"]')
+            .should('have.text', '2')
+        })
       })
     })
   })
