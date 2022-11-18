@@ -228,39 +228,34 @@ describe('index', () => {
       })
     })
 
-    it('asd', () => {
+    it("Others can vote on the user's request", async () => {
       const myId = uuidv4()
 
-      cy.request({
-        method: 'POST',
-        url: 'api/createTest',
-        body: {
-          title: myId,
-        },
-        headers: {
-          'content-type': 'application/json',
-        },
-      }).then((res) => {
-        cy.request({
-          method: 'POST',
-          url: 'api/vote',
-          body: {
-            id: myId,
-            title: myId,
-          },
-          headers: {
-            'x-forwarded-for': '192.168.0.23',
-            'content-type': 'application/json',
-          },
-        }).then((res) => {
-          cy.visit('http://localhost:3000')
-          cy.get(`[data-cy="${myId}"]`)
-            .children()
-            .filter('[data-cy="vote-count"]')
-            .should('have.text', '2')
-        })
-      })
+      await createRequest(myId)
+      await voteFromOtherAddress(myId)
+      cy.visit('http://localhost:3000')
+      cy.get(`[data-cy="${myId}"]`)
+        .children()
+        .filter('[data-cy="vote-count"]')
+        .should('have.text', '2')
     })
+
+    // it('orders features', () => {
+    //   const item1 = uuidv4()
+    //   const item2 = uuidv4()
+    //   const item3 = uuidv4()
+
+    //   cy.request({
+    //     method: 'POST',
+    //     url: 'api/createTest',
+    //     body: {
+    //       title: item1,
+    //     },
+    //     headers: {
+    //       'content-type': 'application/json',
+    //     },
+    //   })
+    // })
   })
 
   function getEmailInput() {
@@ -287,3 +282,41 @@ describe('index', () => {
     return cy.get('[data-cy="addFeature"]')
   }
 })
+
+async function createRequest(myId: string) {
+  await new Promise((resolve) => {
+    return cy
+      .request({
+        method: 'POST',
+        url: 'api/createTest',
+        body: {
+          title: myId,
+        },
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then((res) => {
+        resolve(null)
+      })
+  })
+}
+
+async function voteFromOtherAddress(myId: string) {
+  await new Promise((resolve) => {
+    cy.request({
+      method: 'POST',
+      url: 'api/vote',
+      body: {
+        id: myId,
+        title: myId,
+      },
+      headers: {
+        'x-forwarded-for': '192.168.0.23',
+        'content-type': 'application/json',
+      },
+    }).then((res) => {
+      resolve(null)
+    })
+  })
+}
